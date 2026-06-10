@@ -3,7 +3,7 @@ const router = express.Router()
 const validate = require('../middleware/validator')
 const {signupSchema , loginSchema} = require('../validators/auth.validator')
 
-const authController = require('../controllers/auth')
+const authController = require('../controllers/auth.controller')
 
 router.post('/signup', validate(signupSchema) , authController.signup)
 router.post('/login', validate(loginSchema) , authController.login)

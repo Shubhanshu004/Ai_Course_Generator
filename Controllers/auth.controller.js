@@ -4,10 +4,11 @@ const jwt = require('jsonwebtoken')
 
 const signup = async( req , res) => {
     try{
+        console.log("Routes hitted")
         const{email, password} = req.body
         const hashedpassword =  await bcrypt.hash(password , 10)
         const result = await pool.query(
-            'INSERT INTO auth_users (email , password) VALUES ($1 , $2) RETURNING *',
+            'INSERT INTO users (email , password) VALUES ($1 , $2) RETURNING *',
             [email , hashedpassword]
         )
         res.status(201).json({message: 'User created successfully'}) 
@@ -21,7 +22,7 @@ const login = async ( req , res) => {
     try{
         const {email , password } = req.body
         const result = await pool.query(
-            'SELECT * FROM auth_users WHERE email = $1',
+            'SELECT * FROM users WHERE email = $1',
             [email]
         )
         if(result.rows.length === 0){
