@@ -6,7 +6,7 @@ const authenticate = (req , res, next ) => {
     const token = req.headers['authorization']?.split(' ')[1]
 
     if(!token){
-        res.status(401).json({error: 'No token provided'})
+       return res.status(401).json({error: 'No token provided'})
     }
     const decoded = jwt.verify(token, SECRET_KEY)
     req.user = decoded
