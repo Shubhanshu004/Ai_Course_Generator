@@ -58,7 +58,7 @@ const generateResponse = async(messages) => {
   return completion.choices[0]?.message?.content || '';
 }
 
-module.exports = { generateCourse , generateResponse }
+module.exports = { generateCourse , generateResponse , groq }
 
 if (require.main === module) {
   generateCourse({

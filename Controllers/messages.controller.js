@@ -1,6 +1,6 @@
-const { parse } = require('dotenv');
 const pool = require('../Database/db')
 const llm = require('../services/groq')
+const {summary} = require('../Controllers/sessions.controller')
 
 
 
@@ -15,7 +15,7 @@ const createMessage = async(req , res) => {
     
 
     //send message to groq 
-    const assistantReply = await llm.generateResponse(historyResult.rows);
+    const assistantReply = await llm.generateResponse(historyResult.rows , summary);
     //save groq's reply as the assistant's message in the db
 
     const assistantMessage = await pool.query(
