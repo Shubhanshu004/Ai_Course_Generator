@@ -31,6 +31,12 @@ const createMessage = async(req , res) => {
 
     //fetch the old messages of the current session to maintain the conversation flow 
     const historyResult = await pool.query('select role , content from messages where session_id = $1 order by created_at ASC', [id]);
+        // Update session title if this is the first message
+    if (historyResult.rows.length === 1) {
+      const shortTitle = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+      await pool.query('UPDATE sessions SET title = $1 WHERE id = $2', [shortTitle, id]);
+    }
+
     
     //combine the system and current chat history
     const groqMessages = [

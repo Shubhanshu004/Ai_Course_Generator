@@ -176,19 +176,40 @@ export default function CourseChat() {
         </header>
 
         <div className="messages" ref={scrollRef}>
-          {messages.length === 0 && (
-            <div className="empty-state">
-              <p>This session is empty.</p>
-              <p className="muted">Ask a question to start studying — ChainChat will pick up the thread next time.</p>
+          {messages.length === 0 ? (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flex: 1,
+              textAlign: 'center',
+              padding: '2rem',
+              gap: '0.8rem',
+              color: 'var(--paper)',
+            }}>
+              <h2 style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '2.4rem',
+                fontWeight: '500',
+                color: 'var(--paper)',
+                marginBottom: '0.5rem',
+                letterSpacing: '-0.02em'
+              }}>
+                Let's Continue your learning
+              </h2>
+              <p className="muted" style={{ fontSize: '0.95rem', maxWidth: '460px', lineHeight: '1.6', margin: 0 }}>
+                Ask a question, start a module, or clarify a doubt to pick up exactly where you left off.
+              </p>
             </div>
+          ) : (
+            messages.map((m, i) => (
+              <div key={i} className={`message ${m.role}`}>
+                <span className="role mono">{m.role === 'user' ? 'You' : 'ChainChat'}</span>
+                <p>{m.content}</p>
+              </div>
+            ))
           )}
-
-          {messages.map((m, i) => (
-            <div key={i} className={`message ${m.role}`}>
-              <span className="role mono">{m.role === 'user' ? 'You' : 'ChainChat'}</span>
-              <p>{m.content}</p>
-            </div>
-          ))}
 
           {sending && (
             <div className="message assistant">
@@ -204,15 +225,108 @@ export default function CourseChat() {
           </p>
         )}
 
-        <form className="composer" onSubmit={handleSend}>
+        <form 
+          className="composer" 
+          onSubmit={handleSend}
+          style={{
+            maxWidth: '760px',
+            width: 'calc(100% - 3.6rem)',
+            margin: '0 auto 1.5rem',
+            background: 'var(--ink-soft)',
+            border: '1px solid var(--border)',
+            borderRadius: '24px',
+            padding: '0.4rem 0.6rem 0.4rem 1.2rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.8rem',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+            boxSizing: 'border-box',
+            borderTop: 'none'
+          }}
+        >
+          <button 
+            type="button" 
+            style={{ 
+              background: 'transparent', 
+              color: 'var(--muted)', 
+              padding: 0, 
+              display: 'flex', 
+              alignItems: 'center', 
+              fontSize: '1.4rem',
+              cursor: 'pointer',
+              fontWeight: 'normal'
+            }}
+            title="Attach file (visual only)"
+            onClick={(e) => e.preventDefault()}
+          >
+            +
+          </button>
+          
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask, answer, or continue the lesson..."
+            placeholder="Ask anything..."
             disabled={sending}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              padding: '0.6rem 0',
+              outline: 'none',
+              color: 'var(--paper)',
+              fontSize: '0.95rem',
+              flex: 1
+            }}
           />
-          <button type="submit" disabled={sending || !input.trim()}>
-            Send
+          
+          <svg 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            style={{ color: 'var(--muted)', cursor: 'pointer', flexShrink: 0 }}
+          >
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+
+          <button 
+            type="submit" 
+            disabled={sending || !input.trim()}
+            style={{
+              background: input.trim() ? 'var(--accent)' : 'var(--ink-soft-2)',
+              color: input.trim() ? '#1a1306' : 'var(--muted)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'background 0.2s ease, color 0.2s ease',
+              flexShrink: 0
+            }}
+          >
+            <svg 
+              width="14" 
+              height="14" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2.5" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
           </button>
         </form>
       </main>
