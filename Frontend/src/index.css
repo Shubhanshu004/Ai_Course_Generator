@@ -1,0 +1,601 @@
+/* ============================================================
+   ChainChat — design tokens
+   ink   : deep charcoal-navy background
+   paper : warm off-white text/surfaces
+   amber : the "active / continue" accent
+   teal  : the chain / link color (literal thread between sessions)
+   ============================================================ */
+
+:root {
+  --ink: #14181f;
+  --ink-soft: #1c222b;
+  --ink-soft-2: #232a35;
+  --paper: #f2eee4;
+  --paper-dim: #c9c4b8;
+  --accent: #e8a33d;
+  --link: #5fa8a3;
+  --muted: #7e848d;
+  --danger: #d9695f;
+  --border: #2a313d;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+button {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  background: var(--accent);
+  color: #1a1306;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid var(--border);
+}
+
+button.ghost:hover {
+  border-color: var(--link);
+  color: var(--link);
+}
+
+input,
+select {
+  width: 100%;
+  background: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+input:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 1px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+  margin-bottom: 0.9rem;
+}
+
+/* ============================================================
+   Auth pages (Login / Signup)
+   ============================================================ */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: radial-gradient(circle at 20% 20%, #1a212c 0%, var(--ink) 60%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--ink-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.2rem;
+}
+
+.chain-mark {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.chain-mark .link {
+  width: 28px;
+  height: 14px;
+  border: 3px solid var(--link);
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.chain-mark .link:nth-child(2) {
+  border-color: var(--accent);
+  margin-left: -10px;
+  margin-top: 6px;
+}
+
+.chain-mark .link:nth-child(3) {
+  margin-left: -10px;
+}
+
+.auth-card h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.auth-card .sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 1.6rem;
+}
+
+.auth-card form {
+  margin-top: 0.5rem;
+}
+
+.auth-card button[type='submit'] {
+  width: 100%;
+  margin-top: 0.3rem;
+}
+
+.switch {
+  margin-top: 1.4rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.switch a {
+  color: var(--link);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.switch a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   Dashboard
+   ============================================================ */
+
+.dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.dash-header h1 {
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dash-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.course-card {
+  text-align: left;
+  background: var(--ink-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+  color: var(--paper);
+}
+
+.course-card:hover {
+  border-color: var(--link);
+  transform: translateY(-2px);
+}
+
+.course-card .tag {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+.course-card h3 {
+  font-size: 1.15rem;
+}
+
+.card-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+.empty-state {
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 2.5rem;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.empty-state p {
+  margin: 0.3rem 0;
+}
+
+.empty-state button {
+  margin-top: 1rem;
+}
+
+/* ============================================================
+   New Course modal
+   ============================================================ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 13, 18, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 10;
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+  background: var(--ink-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.8rem;
+}
+
+.modal h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.modal .muted {
+  font-size: 0.85rem;
+  margin: 0 0 1.2rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+/* ============================================================
+   Chat page
+   ============================================================ */
+
+.chat-page {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: 100vh;
+}
+
+.chat-sidebar {
+  background: var(--ink-soft);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  overflow-y: auto;
+}
+
+.chat-sidebar .back {
+  align-self: flex-start;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+}
+
+.chat-sidebar h2 {
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+/* --- Session chain: the signature visual --- */
+.session-chain {
+  background: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.session-chain h4 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+}
+
+.chain-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.chain-node {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.chain-node.done {
+  background: var(--ink-soft-2);
+  border: 2px solid var(--link);
+}
+
+.chain-node.active {
+  background: var(--accent);
+  color: #1a1306;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 4px rgba(232, 163, 61, 0.15);
+}
+
+.chain-line {
+  flex: 1;
+  height: 2px;
+  background: var(--link);
+  min-width: 24px;
+}
+
+.modules {
+  margin-top: auto;
+}
+
+.modules h4 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.module-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.module-item:last-child {
+  border-bottom: none;
+}
+
+.module-item .mono {
+  color: var(--link);
+  font-size: 0.75rem;
+}
+
+/* --- Main chat area --- */
+
+.chat-main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.session-label {
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+  margin-right: 0.8rem;
+}
+
+.continue-tag {
+  font-size: 0.75rem;
+  color: var(--link);
+  border: 1px solid var(--link);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+.end-session {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--paper-dim);
+  font-size: 0.85rem;
+}
+
+.end-session:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.message {
+  max-width: 70ch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.message.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.message.assistant {
+  align-self: flex-start;
+}
+
+.message .role {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.message p {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.message.user p {
+  background: var(--accent);
+  color: #1a1306;
+  border-radius: 12px 12px 2px 12px;
+}
+
+.message.assistant p {
+  background: var(--ink-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px 12px 12px 2px;
+}
+
+.message .typing {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.composer {
+  display: flex;
+  gap: 0.7rem;
+  padding: 1.2rem 1.8rem;
+  border-top: 1px solid var(--border);
+}
+
+.composer input {
+  flex: 1;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 800px) {
+  .chat-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .chat-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition: none;
+  }
+}
