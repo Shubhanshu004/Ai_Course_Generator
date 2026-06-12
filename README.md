@@ -1,148 +1,148 @@
-# ⛓ ChainChat: AI-Powered Course Generator & Linked-Session Learning Platform
+ChainChat: AI Course Creator and Connected-Session Learning Platform
 
-ChainChat is a modern full-stack web application designed to solve the **context-window degradation** problem in long LLM-based educational conversations. Instead of learning a complex topic in a single endless chat (where the model eventually forgets instructions, loses formatting, and gets slow), ChainChat segments learning into structured **Sessions** mapped directly to a course roadmap. 
+ChainChat is a new full-stack web application that addresses the issue of context-window degradation in long LLM-based educational conversations. Instead of learning complex topics over one seemingly endless chat where the model starts forgetting instructions, loses formatting, and becomes slower, ChainChat breaks learning down into specific Sessions mapped to a course structure. 
 
-When a session ends, the platform generates a summary of topics covered and automatically carries that summary forward to seed the next active session.
-
----
-
-## 🏗 System Architecture & System Design
-
-ChainChat uses a **Linked-Session Tree** structure. Each chat session is a node linked to a parent session, creating a history chain that carries context forward via semantic compression (summaries) instead of raw messages.
-
-```
-[Session 10: Closed/Completed] ──► (LLM Summarization) ──► [Summary of Session 10]
-                                                                  │
-                                                                  ▼ (Context Injection)
-                                                          [Session 11: Active]
-                                                                  │
-                                                                  ▼
-                                                          [Self-contained Chat]
-```
-
-### Key Technical Achievements:
-- **Semantic Context Compression:** Solves rate limit/token count issues by carrying forward immediate parent summaries rather than raw message history.
-- **Dynamic Session Instantiation:** Auto-creates child sessions referencing parent IDs when a user accesses a completed course thread.
-- **ChatGPT-Style Sidebar Navigation:** Fast, responsive UI containing custom session titles generated dynamically on first message send.
-- **API Defense (Rate Limiting):** Implemented strict endpoint limits for the resource-heavy AI routes to prevent cost inflation.
+When one session ends, the AI summarizes the content covered and injects it into the next active session.
 
 ---
 
-## 🛠 Tech Stack
+System Architecture and System Design
 
-- **Frontend:** React, Vite, Vanilla CSS (Premium custom dark design system)
-- **Backend:** Node.js, Express.js
-- **Database:** PostgreSQL (with Relational/Self-Referencing Keys)
-- **AI Integration:** Groq SDK (`llama-3.3-70b-versatile` model)
-- **Security & Performance:** JWT (JSON Web Tokens), bcrypt, `express-rate-limit`
+ChainChat utilizes a Linked-Session Tree structure where each chat session is a node connected to its parent session, thereby building a history chain that passes down context through semantically compressed summaries rather than raw message text.
+
+``
+[Session 10: Closed/Completed] (LLM Summarization) [Summary of Session 10]
+ 
+ (Context Injection)
+ [Session 11: Active]
+ 
+ 
+ [Self-contained Chat]
+`
+
+Key Technical Accomplishments:
+- Semantic Context Compression: Avoids rate limit and token count issues by forwarding immediate parent session summaries rather than entire message history.
+- Dynamic Session Instantiation: Automatically creates child sessions that reference their parents when a user accesses a closed course thread.
+- ChatGPT-like Sidebar Navigation: Provides a quick, responsive UI that displays custom session titles generated dynamically when the first message is sent.
+- API Defense (Rate Limiting): Enforces strict rate limits on the computationally intensive AI routes to curb potential cost overruns.
 
 ---
 
-## 🗄 Database Schema
+Tech Stack
 
-The database relies on four core tables with relational integrity rules:
+- Frontend: React, Vite, Vanilla CSS (with a premium, custom dark design system)
+- Backend: Node.js, Express.js
+- Database: PostgreSQL (with Relational and Self-Referencing Keys)
+- AI Integration: Groq SDK (using the llama-3.3-70b-versatile model)
+- Security and Performance: JWT (JSON Web Tokens), bcrypt, express-rate-limit
 
-```sql
--- 1. User Management
+---
+
+Database Schema
+
+Four primary tables with relational integrity constraints form the database:
+
+`sql
+-- User Management
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) DEFAULT 'user'
+ id SERIAL PRIMARY KEY,
+ email VARCHAR(255) UNIQUE NOT NULL,
+ password VARCHAR(255) NOT NULL,
+ role VARCHAR(50) DEFAULT 'user'
 );
 
--- 2. Customized Courses
+-- Custom Courses
 CREATE TABLE courses (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    title VARCHAR(255) NOT NULL,
-    topic VARCHAR(255) NOT NULL,
-    level VARCHAR(50),
-    pace VARCHAR(50),
-    structure JSONB -- Stores the full modules and lessons generated by the LLM
+ id SERIAL PRIMARY KEY,
+ user_id INTEGER REFERENCES users(id),
+ title VARCHAR(255) NOT NULL,
+ topic VARCHAR(255) NOT NULL,
+ level VARCHAR(50),
+ pace VARCHAR(50),
+ structure JSONB -- Stores the full modules and lessons generated by the LLM
 );
 
--- 3. Chat Sessions (Self-referencing tree)
+-- Chat Sessions (Self-referencing tree)
 CREATE TABLE sessions (
-    id SERIAL PRIMARY KEY,
-    course_id INTEGER REFERENCES courses(id),
-    user_id INTEGER REFERENCES users(id),
-    parent_session_id INTEGER REFERENCES sessions(id) ON DELETE SET NULL,
-    summary TEXT,
-    title VARCHAR(255) DEFAULT 'New Chat',
-    status VARCHAR(50) DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ id SERIAL PRIMARY KEY,
+ course_id INTEGER REFERENCES courses(id),
+ user_id INTEGER REFERENCES users(id),
+ parentsessionid INTEGER REFERENCES sessions(id) ON DELETE SET NULL,
+ summary TEXT,
+ title VARCHAR(255) DEFAULT 'New Chat',
+ status VARCHAR(50) DEFAULT 'active',
+ createdat TIMESTAMP DEFAULT CURRENTTIMESTAMP
 );
 
--- 4. Chat Messages
+-- Chat Messages
 CREATE TABLE messages (
-    id SERIAL PRIMARY KEY,
-    session_id INTEGER REFERENCES sessions(id) ON DELETE CASCADE,
-    role VARCHAR(50) NOT NULL, -- 'user' or 'assistant'
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ id SERIAL PRIMARY KEY,
+ session_id INTEGER REFERENCES sessions(id) ON DELETE CASCADE,
+ role VARCHAR(50) NOT NULL, -- 'user' or 'assistant'
+ content TEXT NOT NULL,
+ createdat TIMESTAMP DEFAULT CURRENTTIMESTAMP
 );
-```
+`
 
 ---
 
-## 🔌 API Endpoints
+API Endpoints
 
-### Authentication
-- `POST /auth/signup` - Register a new account.
-- `POST /auth/login` - Authenticate user and receive a JWT token.
+Authentication
+- POST /auth/signup - Register a new account.
+- POST /auth/login - Log in a user and obtain a JWT token.
 
-### Courses
-- `POST /courses` - Generate a new course roadmap with an LLM and save it.
-- `GET /courses` - Get all courses generated by the authenticated user.
-- `GET /courses/:id` - Get course details (including/auto-initializing active session ID).
+Courses
+- POST /courses - Generate a new course roadmap and store it.
+- GET /courses - Retrieve all courses created by the authenticated user.
+- GET /courses/:id - Fetch course details (including/auto-initializing an active session ID).
 
-### Sessions & Messages
-- `GET /courses/:id/sessions` - Fetch all session history nodes for a specific course.
-- `POST /sessions/:id/messages` - Send a message to the AI inside a specific session.
-- `GET /sessions/:id/messages` - Retrieve chat history messages for a specific session.
-- `PATCH /sessions/:id` - End the current session, generate a summary, and update status to `completed`.
+Sessions and Messages
+- GET /courses/:id/sessions - Retrieve all session history nodes for a specific course.
+- POST /sessions/:id/messages - Send a message to the AI within a given session.
+- GET /sessions/:id/messages - Fetch chat history messages for a particular session.
+- PATCH /sessions/:id - Close the current session, generate a summary, and update its status to completed.
 
 ---
 
-## 🚀 Setup & Installation Instructions
+Setup and Installation Instructions
 
-### Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd Backend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file in the `/Backend` root:
-   ```env
-   SECRET_KEY=your_jwt_secret_key
-   GROQ_API_KEY=your_groq_api_key
-   DB_USER=postgres
-   DB_HOST=localhost
-   DB_PASSWORD=your_postgres_password
-   DB_NAME=ai_course_maker
-   DB_PORT=5432
-   PORT=3000
-   ```
-4. Start the database schemas, then start the server in development mode:
-   ```bash
-   npm run dev
-   ```
+Backend Setup
+1. Change into the backend directory:
+ `bash
+ cd Backend
+ `
+2. Install the project dependencies:
+ `bash
+ npm install
+ `
+3. Create a .env file in the /Backend root folder with the following details:
+ `env
+ SECRETKEY=yourjwtsecretkey
+ GROQAPIKEY=yourgroqapi_key
+ DB_USER=postgres
+ DB_HOST=localhost
+ DBPASSWORD=yourpostgres_password
+ DBNAME=aicourse_maker
+ DB_PORT=5432
+ PORT=3000
+ `
+4. Initialize the database schemas, then start the server for development:
+ `bash
+ npm run dev
+ `
 
-### Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd Frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the Vite React development server:
-   ```bash
-   npm run dev
-   ```
-4. Open your browser to the URL printed in the terminal (usually `http://localhost:5173`).
+Frontend Setup
+1. Change into the frontend directory:
+ `bash
+ cd Frontend
+ `
+2. Install the project dependencies:
+ `bash
+ npm install
+ `
+3. Launch the Vite React development server:
+ `bash
+ npm run dev
+ `
+4. Open your browser to the URL displayed in the terminal (usually http://localhost:5173`).
