@@ -8,7 +8,7 @@
 // ============================================================
 
 // Change this if your backend runs on a different port.
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
 // Your JWT is stored in localStorage after login.
 // localStorage persists even after the tab is closed.

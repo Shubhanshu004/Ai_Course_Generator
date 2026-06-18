@@ -1,0 +1,53 @@
+services:
+  # --- PostgreSQL Database ---
+  db:
+    image: postgres:15-alpine
+    container_name: course_maker_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: coursemaker
+    ports:
+      - "5432:5432"
+    volumes:
+      # Automatically initializes database tables on first container startup
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Persists database data on the host machine
+      - postgres_data:/var/lib/postgresql/data
+
+  # --- Backend Express API ---
+  backend:
+    build: ./Backend
+    container_name: course_maker_backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DB_USER: postgres
+      DB_PASSWORD: 12345
+      DB_NAME: coursemaker
+      DB_PORT: 5432
+      DB_HOST: db # Name of the DB service above
+      SECRET_KEY: supersecretjwtkey
+      GROQ_API_KEY: ${GROQ_API_KEY} # Will read from root .env or shell environment
+    depends_on:
+      - db
+
+  # --- Frontend React Web App ---
+  frontend:
+    build:
+      context: ./Frontend
+      args:
+        # Build Vite with the API url pointing to backend on host machine
+        - VITE_API_URL=http://localhost:3000
+    container_name: course_maker_frontend
+    restart: always
+    ports:
+      - "5173:80" # Maps local port 5173 to Nginx port 80
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
