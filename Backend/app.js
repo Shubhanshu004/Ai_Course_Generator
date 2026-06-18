@@ -21,11 +21,7 @@ const apilimiter = rateLimit({
     max: 100,
     message: {error: 'Too many requests , please try again later'}
 })
-const chatLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 mins
-    max: 15, // strictly limit only 15 messages per 15 minutes to save AI costs
-    message: { error: 'You have reached the chat limit. Please wait 15 minutes.' }
-});
+
 
 
 
@@ -36,7 +32,7 @@ const chatLimiter = rateLimit({
 //routes
 app.use('/auth' ,apilimiter,  authRoutes)
 app.use('/courses' ,apilimiter ,CoursesRoutes )
-app.use('/',chatLimiter , messageRoutes)
+app.use('/' , messageRoutes)
 app.use('/',apilimiter , sessionRoutes)
 
 
